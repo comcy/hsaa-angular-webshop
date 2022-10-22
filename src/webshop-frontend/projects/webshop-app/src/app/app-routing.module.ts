@@ -13,7 +13,7 @@ const routes: Routes = [
     component: ImpressumComponent,
   },
   {
-    path: '',
+    path: '', // fängt leere route in Browser Adressleiste ab und macht einen redirect -> 'products'
     pathMatch: 'full',
     redirectTo: 'products',
   },
