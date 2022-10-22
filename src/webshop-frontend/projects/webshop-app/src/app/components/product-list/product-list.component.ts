@@ -11,9 +11,11 @@ import {
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
-  public productList: Product[] = []; // Liste von Produkten
+  public productList: Product[] = []; // Liste von Produkten, initialisiert als leeres Array um Laufzeitfehler zu vermeiden
 
-  constructor(private productsService: ProductHttpService) {}
+  constructor(
+    private productsService: ProductHttpService // DependencyInjection
+  ) {}
 
   ngOnInit(): void {
     this.productsService
