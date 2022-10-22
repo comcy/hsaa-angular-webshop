@@ -14,14 +14,20 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Project information
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The webshop-frontend is based on a single application named "webshop-app" and a library called "shared-lib".
+The following sections describes the purpose of each one.
 
-## Running end-to-end tests
+### webshop-app
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+The following things ared handled within the application:
+1. Routing of the application
+2. Provides the main layout 
 
-## Further help
+### shared-lib
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The purpose of this library is to provide generalized components and reusable services.
+
+1. `components`: reusable components used in the app
+2. `http-services`: reusable services for handling http requests
