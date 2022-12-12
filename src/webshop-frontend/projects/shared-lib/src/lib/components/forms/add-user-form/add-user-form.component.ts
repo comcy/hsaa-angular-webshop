@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserLogicService } from '../../../logic-services/user-logic.service';
+import { UsersLogicServiceInterface } from '../../../domain/core-services/user-logic-service.interface';
 
 @Component({
   selector: 'lib-add-user-form',
@@ -19,14 +19,13 @@ export class AddUserFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private userLogicService: UserLogicService
+    private usersLogicServiceInterface: UsersLogicServiceInterface
   ) {}
 
   ngOnInit(): void {}
 
   public submit() {
-    console.log('>>>> ', this.addUserForm);
-    this.userLogicService.addUser(this.addUserForm.value);
+    this.usersLogicServiceInterface.addUser(this.addUserForm.value);
     this.userAdded.emit();
   }
 }
