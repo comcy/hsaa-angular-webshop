@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddUserDialogComponent } from 'projects/shared-lib/src/lib/components/dialogs/add-user-dialog/add-user-dialog.component';
-import { UserLogicService } from 'projects/shared-lib/src/lib/logic-services/user-logic.service';
-import { Observable } from 'rxjs';
-import { User } from '../../../../../shared-lib/src/lib/logic-services/users.interfaces';
+import { CommonSnackbarComponent } from 'projects/shared-lib/src/lib/components/snackbar/common-snackbar/common-snackbar.component';
+import { UsersLogicServiceInterface } from 'projects/shared-lib/src/lib/domain/core-services/user-logic-service.interface';
 
 @Component({
   selector: 'app-users',
@@ -11,19 +11,12 @@ import { User } from '../../../../../shared-lib/src/lib/logic-services/users.int
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
-  public resultsLength = 0;
-  public displayedColumns: string[] = [
-    'userName',
-    'firstName',
-    'lastName',
-    'email',
-  ];
-
-  private readonly users = Observable<User[]>;
+  private durationInSeconds = 3;
 
   constructor(
+    public usersLogicServiceInterface: UsersLogicServiceInterface,
     public dialog: MatDialog,
-    public userLogicService: UserLogicService
+    private snackBar: MatSnackBar
   ) {}
 
   async ngOnInit(): Promise<void> {}
@@ -35,6 +28,10 @@ export class UsersComponent implements OnInit {
 
     const dialogRef = this.dialog.open(AddUserDialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => {
+      this.snackBar.openFromComponent(CommonSnackbarComponent, {
+        duration: this.durationInSeconds * 1000,
+      });
+    });
   }
 }

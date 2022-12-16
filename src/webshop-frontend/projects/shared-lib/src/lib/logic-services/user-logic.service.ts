@@ -1,46 +1,32 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from './users.interfaces';
+import { UsersLogicServiceInterface, UserViewModel } from '../domain';
+import { DEFAULT_USERS, SYSTEM_USERS } from './sample-users';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserLogicService {
-  private users: User[] = [
-    {
-      userName: 'mad_max',
-      firstName: 'Max',
-      lastName: 'Mustermann',
-      email: 'maxmu@online.de',
-    },
-    {
-      userName: 'joe666',
-      firstName: 'Joe',
-      lastName: 'Jordison',
-      email: 'joe-y@online.de',
-    },
-    {
-      userName: 'freeenk',
-      firstName: 'Frank',
-      lastName: 'Bleck',
-      email: 'frable@online.de',
-    },
-    {
-      userName: 'erika',
-      firstName: 'Erika',
-      lastName: 'Müller',
-      email: 'erikaller@online.de',
-    },
-  ];
+export class UserLogicService implements UsersLogicServiceInterface {
+  private users!: UserViewModel[];
 
-  public userList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
-    this.users
-  );
+  public userList$: BehaviorSubject<UserViewModel[]> = new BehaviorSubject<
+    UserViewModel[]
+  >(DEFAULT_USERS);
 
   constructor() {}
 
-  public addUser(user: User): void {
+  public init(): void {
+    this.users = this.loadUsers(); //  init is important to avoid push-errors on empty array
+    this.userList$.next(this.loadUsers());
+  }
+
+  public addUser(user: UserViewModel): void {
     this.users.push(user);
     this.userList$.next(this.users);
+  }
+
+  private loadUsers(): UserViewModel[] {
+    // COULD BE A CALL TO HTTP Service
+    return SYSTEM_USERS;
   }
 }

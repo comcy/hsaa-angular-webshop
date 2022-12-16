@@ -19,12 +19,20 @@ import { RouterModule } from '@angular/router';
 import { AddUserDialogComponent } from './components/dialogs/add-user-dialog/add-user-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
 import { AddUserFormComponent } from './components/forms/add-user-form/add-user-form.component';
+import { UsersListComponent } from './components/lists/users-list/users-list.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { UsersLogicServiceInterface } from './domain/core-services/user-logic-service.interface';
+import { UserLogicService } from './logic-services/user-logic.service';
+import { CommonSnackbarComponent } from './components/snackbar/common-snackbar/common-snackbar.component';
 
 @NgModule({
   declarations: [
     MenuBarComponent,
     AddUserDialogComponent,
     AddUserFormComponent,
+    UsersListComponent,
+    CommonSnackbarComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -50,7 +58,12 @@ import { AddUserFormComponent } from './components/forms/add-user-form/add-user-
     MatGridListModule,
     MatSelectModule,
     MatToolbarModule,
+    MatPaginatorModule,
+    MatTableModule,
   ],
-  exports: [MenuBarComponent],
+  exports: [MenuBarComponent, UsersListComponent],
+  providers: [
+    { provide: UsersLogicServiceInterface, useClass: UserLogicService },
+  ],
 })
 export class SharedLibModule {}
