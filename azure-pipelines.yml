@@ -32,7 +32,7 @@ steps:
 - script: |
     ls -al
     ls -al ${{ variables.PROJECT_PATH }}
-  displayname: 'DEBUG'
+  displayName: 'DEBUG'
 
 
 
