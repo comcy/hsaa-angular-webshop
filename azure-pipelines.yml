@@ -32,6 +32,7 @@ steps:
 - script: |
     ls -al
     ls -al ${{ variables.PROJECT_PATH }}
+    ls -al ${{ variables.PROJECT_PATH }}/projects
   displayName: 'DEBUG'
 
 
