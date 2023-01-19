@@ -38,12 +38,6 @@ steps:
 #   displayName: 'npm install and build'
 
   ## npm build release
-- task: Npm@1
-  displayName: "Build release"
-  inputs:
-    command: "custom"
-    customCommand: "run test"
-    workingDir: ${{ variables.PROJECT_PATH }}
 
 - task: Npm@1
   displayName: "Build release"
