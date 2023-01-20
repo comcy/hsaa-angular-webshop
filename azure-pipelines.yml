@@ -19,37 +19,54 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-# stages:
-#  - stage: 'qa'
+stages:
 
-steps:
+  - stage: 'qa'
+    displayName: 'QA Stage'
+    jobs: 
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'
-  displayName: 'Install Node.js'
+      - job: 'prepare'
+        steps: 
 
-- script: |
-    ls -al
-    ls -al ${{ variables.PROJECT_PATH }}
-    ls -al ${{ variables.PROJECT_PATH }}/projects
-  displayName: 'DEBUG'
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '16.x'
+          displayName: 'Install Node.js'
 
+        - script: |
+            ls -al
+            ls -al ${{ variables.PROJECT_PATH }}
+            ls -al ${{ variables.PROJECT_PATH }}/projects
+          displayName: 'DEBUG'
 
+        - task: Npm@1
+          displayName: "Test"
+          inputs:
+            command: "custom"
+            customCommand: "run test"
+            workingDir: ${{ variables.PROJECT_PATH }}
+  
+  - stage: 'release'
+    displayName: 'RELEASE Stage'
+    jobs: 
 
-# BUILD
-# - script: |
-#     cd ${{ variables.PROJECT_PATH}}
-#     npm install -g @angular/cli
-#     npm install
-#     npm run build
-#   displayName: 'npm install and build'
+      - job: 'prepare'
+        steps: 
 
-  ## npm build release
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '16.x'
+          displayName: 'Install Node.js'
 
-- task: Npm@1
-  displayName: "Build release"
-  inputs:
-    command: "custom"
-    customCommand: "run build"
-    workingDir: ${{ variables.PROJECT_PATH }}
+        - script: |
+            ls -al
+            ls -al ${{ variables.PROJECT_PATH }}
+            ls -al ${{ variables.PROJECT_PATH }}/projects
+          displayName: 'DEBUG'
+
+        - task: Npm@1
+          displayName: "Build release"
+          inputs:
+            command: "custom"
+            customCommand: "run build"
+            workingDir: ${{ variables.PROJECT_PATH }}
