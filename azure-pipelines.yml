@@ -91,5 +91,5 @@ stages:
             displayName: "Build release"
             inputs:
               command: "custom"
-              customCommand: "run build"
+              customCommand: "run build ${{ variables.PROJECT_NAME }}"
               workingDir: ${{ variables.PROJECT_PATH }}
