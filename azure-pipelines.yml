@@ -13,14 +13,14 @@ variables:
   - name: PROJECT_PATH
     value: "src/webshop-frontend/"
 
-  - name: PROJECT_NAME
+  - name: APP_NAME
     value: "webshop-app"
 
   - name: SHARED_LIB
     value: "shared-lib"
 
-  - name: PROJECT_DIST_PATH
-    value: "src/webshop-frontend/dist/webshop-app/"
+  - name: SHARED_LIB_DIST_PATH
+    value: "src/webshop-frontend/dist/shared-lib/"
 
 pool:
   vmImage: "ubuntu-latest"
@@ -50,10 +50,10 @@ stages:
               workingDir: ${{ variables.PROJECT_PATH }}
 
           - task: Npm@1
-            displayName: "Test ${{ variables.PROJECT_NAME }}"
+            displayName: "Test ${{ variables.APP_NAME }}"
             inputs:
               command: "custom"
-              customCommand: "run test ${{ variables.PROJECT_NAME }}"
+              customCommand: "run test ${{ variables.APP_NAME }}"
               workingDir: ${{ variables.PROJECT_PATH }}
 
           - task: Npm@1
@@ -63,7 +63,7 @@ stages:
               customCommand: "run test ${{ variables.SHARED_LIB }}"
               workingDir: ${{ variables.PROJECT_PATH }}
 
-  - stage: "release_stage"
+  - stage: "build_app_stage"
     displayName: "RELEASE Stage"
     dependsOn: ["qa_stage"]
     jobs:
@@ -91,5 +91,43 @@ stages:
             displayName: "Build release"
             inputs:
               command: "custom"
-              customCommand: "run build ${{ variables.PROJECT_NAME }}"
+              customCommand: "run build ${{ variables.APP_NAME }}"
+              workingDir: ${{ variables.PROJECT_PATH }}
+
+  - stage: "publish_stage"
+    displayName: "PUBLISH Stage"
+    dependsOn: ["qa_stage", "build_app_stage"] # Parallelisierung
+    jobs:
+      - job: "prepare_job"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "16.x"
+            displayName: "Install Node.js"
+
+          - script: |
+              ls -al
+              ls -al ${{ variables.PROJECT_PATH }}
+              ls -al ${{ variables.PROJECT_PATH }}/projects
+            displayName: "DEBUG"
+
+          - task: Npm@1
+            displayName: "Install"
+            inputs:
+              command: "custom"
+              customCommand: "install"
+              workingDir: ${{ variables.PROJECT_PATH }}
+
+          - task: Npm@1
+            displayName: "Build release"
+            inputs:
+              command: "custom"
+              customCommand: "run build ${{ variables.SHARED_LIB }}"
+              workingDir: ${{ variables.PROJECT_PATH }}
+
+          - task: Npm@1
+            displayName: "Publish release"
+            inputs:
+              command: "custom"
+              customCommand: "publish ${{ variables.SHARED_LIB_DIST_PATH }}"
               workingDir: ${{ variables.PROJECT_PATH }}
