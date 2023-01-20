@@ -7,49 +7,61 @@ trigger:
   batch: true
   branches:
     include:
-    - '*'
+      - "*"
 
 variables:
-- name: PROJECT_PATH
-  value: 'src/webshop-frontend/'
+  - name: PROJECT_PATH
+    value: "src/webshop-frontend/"
 
-- name: PROJECT_DIST_PATH
-  value: 'src/webshop-frontend/dist/webshop-app/'
+  - name: PROJECT_DIST_PATH
+    value: "src/webshop-frontend/dist/webshop-app/"
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
-# stages:
-#  - stage: 'qa'
+stages:
+  - stage: "qa"
+    displayName: "QA Stage"
+    jobs:
+      - job: "prepare"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "16.x"
+            displayName: "Install Node.js"
 
-steps:
+          - script: |
+              ls -al
+              ls -al ${{ variables.PROJECT_PATH }}
+              ls -al ${{ variables.PROJECT_PATH }}/projects
+            displayName: "DEBUG"
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'
-  displayName: 'Install Node.js'
+          - task: Npm@1
+            displayName: "Test"
+            inputs:
+              command: "custom"
+              customCommand: "run test"
+              workingDir: ${{ variables.PROJECT_PATH }}
 
-- script: |
-    ls -al
-    ls -al ${{ variables.PROJECT_PATH }}
-    ls -al ${{ variables.PROJECT_PATH }}/projects
-  displayName: 'DEBUG'
+  - stage: "release"
+    displayName: "RELEASE Stage"
+    jobs:
+      - job: "prepare"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "16.x"
+            displayName: "Install Node.js"
 
+          - script: |
+              ls -al
+              ls -al ${{ variables.PROJECT_PATH }}
+              ls -al ${{ variables.PROJECT_PATH }}/projects
+            displayName: "DEBUG"
 
-
-# BUILD
-- script: |
-    cd ${{ variables.PROJECT_PATH}}
-    npm install -g @angular/cli
-#     npm install
-#     npm run build
-  displayName: 'npm install and build'
-
-  ## npm build release
-
-- task: Npm@1
-  displayName: "Build release"
-  inputs:
-    command: "custom"
-    customCommand: "run build webshop-app"
-    workingDir: ${{ variables.PROJECT_PATH }}
+          - task: Npm@1
+            displayName: "Build release"
+            inputs:
+              command: "custom"
+              customCommand: "run build"
+              workingDir: ${{ variables.PROJECT_PATH }}
