@@ -13,6 +13,12 @@ variables:
   - name: PROJECT_PATH
     value: "src/webshop-frontend/"
 
+  - name: PROJECT_NAME
+    value: "webshop-app"
+
+  - name: SHARED_LIB
+    value: "shared-lib"
+
   - name: PROJECT_DIST_PATH
     value: "src/webshop-frontend/dist/webshop-app/"
 
@@ -44,10 +50,17 @@ stages:
               workingDir: ${{ variables.PROJECT_PATH }}
 
           - task: Npm@1
-            displayName: "Test"
+            displayName: "Test ${{ variables.PROJECT_NAME }}"
             inputs:
               command: "custom"
-              customCommand: "run test"
+              customCommand: "run test ${{ variables.PROJECT_NAME }}"
+              workingDir: ${{ variables.PROJECT_PATH }}
+
+          - task: Npm@1
+            displayName: "Test ${{ variables.SHARED_LIB }}"
+            inputs:
+              command: "custom"
+              customCommand: "run test ${{ variables.SHARED_LIB }}"
               workingDir: ${{ variables.PROJECT_PATH }}
 
   - stage: "release_stage"
