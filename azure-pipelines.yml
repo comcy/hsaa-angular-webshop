@@ -66,37 +66,37 @@ stages:
               customCommand: "run test ${{ variables.SHARED_LIB }}"
               workingDir: ${{ variables.PROJECT_PATH }}
 
-  # - stage: "build_app_stage"
-  #   displayName: "RELEASE Stage"
-  #   dependsOn: ["qa_stage"]
-  #   condition: and(succeeded(), eq(variables.IS_MASTER, 'true'))
-  #   jobs:
-  #     - job: "prepare_job"
-  #       steps:
-  #         - task: NodeTool@0
-  #           inputs:
-  #             versionSpec: "16.x"
-  #           displayName: "Install Node.js"
+  - stage: "build_app_stage"
+    displayName: "RELEASE Stage"
+    dependsOn: ["qa_stage"]
+    condition: and(succeeded(), eq(variables.IS_MASTER, 'true'))
+    jobs:
+      - job: "prepare_job"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "16.x"
+            displayName: "Install Node.js"
 
-  #         - script: |
-  #             ls -al
-  #             ls -al ${{ variables.PROJECT_PATH }}
-  #             ls -al ${{ variables.PROJECT_PATH }}/projects
-  #           displayName: "DEBUG"
+          - script: |
+              ls -al
+              ls -al ${{ variables.PROJECT_PATH }}
+              ls -al ${{ variables.PROJECT_PATH }}/projects
+            displayName: "DEBUG"
 
-  #         - task: Npm@1
-  #           displayName: "Install"
-  #           inputs:
-  #             command: "custom"
-  #             customCommand: "install"
-  #             workingDir: ${{ variables.PROJECT_PATH }}
+          - task: Npm@1
+            displayName: "Install"
+            inputs:
+              command: "custom"
+              customCommand: "install"
+              workingDir: ${{ variables.PROJECT_PATH }}
 
-  #         - task: Npm@1
-  #           displayName: "Build release"
-  #           inputs:
-  #             command: "custom"
-  #             customCommand: "run build ${{ variables.APP_NAME }}"
-  #             workingDir: ${{ variables.PROJECT_PATH }}
+          - task: Npm@1
+            displayName: "Build release"
+            inputs:
+              command: "custom"
+              customCommand: "run build ${{ variables.APP_NAME }}"
+              workingDir: ${{ variables.PROJECT_PATH }}
 
   # - stage: "publish_stage"
   #   displayName: "PUBLISH Stage"
