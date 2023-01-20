@@ -20,10 +20,10 @@ pool:
   vmImage: "ubuntu-latest"
 
 stages:
-  - stage: "qa"
+  - stage: "qa_stage"
     displayName: "QA Stage"
     jobs:
-      - job: "prepare"
+      - job: "prepare_job"
         steps:
           - task: NodeTool@0
             inputs:
@@ -43,10 +43,11 @@ stages:
               customCommand: "run test"
               workingDir: ${{ variables.PROJECT_PATH }}
 
-  - stage: "release"
+  - stage: "release_stage"
     displayName: "RELEASE Stage"
+    dependsOn: ["qa_stage"]
     jobs:
-      - job: "prepare"
+      - job: "prepare_job"
         steps:
           - task: NodeTool@0
             inputs:
