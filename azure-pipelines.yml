@@ -22,6 +22,9 @@ variables:
   - name: SHARED_LIB_DIST_PATH
     value: "src/webshop-frontend/dist/shared-lib/"
 
+  - name: IS_MASTER
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+
 pool:
   vmImage: "ubuntu-latest"
 
@@ -66,6 +69,7 @@ stages:
   - stage: "build_app_stage"
     displayName: "RELEASE Stage"
     dependsOn: ["qa_stage"]
+    condition: and(succeeded(), eq(variables.IS_MASTER, 'true'))
     jobs:
       - job: "prepare_job"
         steps:
