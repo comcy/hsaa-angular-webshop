@@ -37,6 +37,13 @@ stages:
             displayName: "DEBUG"
 
           - task: Npm@1
+            displayName: "Install"
+            inputs:
+              command: "custom"
+              customCommand: "install"
+              workingDir: ${{ variables.PROJECT_PATH }}
+
+          - task: Npm@1
             displayName: "Test"
             inputs:
               command: "custom"
@@ -59,6 +66,13 @@ stages:
               ls -al ${{ variables.PROJECT_PATH }}
               ls -al ${{ variables.PROJECT_PATH }}/projects
             displayName: "DEBUG"
+
+          - task: Npm@1
+            displayName: "Install"
+            inputs:
+              command: "custom"
+              customCommand: "install"
+              workingDir: ${{ variables.PROJECT_PATH }}
 
           - task: Npm@1
             displayName: "Build release"
