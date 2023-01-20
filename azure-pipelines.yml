@@ -38,12 +38,12 @@ steps:
 
 
 # BUILD
-# - script: |
-#     cd ${{ variables.PROJECT_PATH}}
-#     npm install -g @angular/cli
+- script: |
+    cd ${{ variables.PROJECT_PATH}}
+    npm install -g @angular/cli
 #     npm install
 #     npm run build
-#   displayName: 'npm install and build'
+  displayName: 'npm install and build'
 
   ## npm build release
 
@@ -51,5 +51,5 @@ steps:
   displayName: "Build release"
   inputs:
     command: "custom"
-    customCommand: "run build"
+    customCommand: "run build webshop-app"
     workingDir: ${{ variables.PROJECT_PATH }}
